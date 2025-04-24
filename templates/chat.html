@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor - Chat Session</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3>🧠 Study Buddy AI</h3>
+                <p class="user-info">
+                    <span id="user-name-display"></span> |
+                    <span id="tutor-role-display"></span>
+                </p>
+
+                <!-- Sound settings toggle button -->
+                <div class="sound-settings" id="sound-settings-toggle">
+                    <span id="sound-icon">🔊</span>
+                </div>
+
+                <!-- Sound settings panel -->
+                <div class="audio-settings-panel" id="audio-settings-panel">
+                    <h6>Audio Settings</h6>
+                    <div class="setting-option">
+                        <span>Autoplay audio</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoplay-toggle" checked>
+                            <span class="slider"></span>
+                            <span class="sr-only">Toggle autoplay</span>
+                        </label>
+                    </div>
+                    <div class="setting-option">
+                        <span>Typing animation</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="typing-animation-toggle" checked>
+                            <span class="slider"></span>
+                            <span class="sr-only">Toggle typing animation</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="end-session-btn" class="btn secondary-btn">End Session</button>
+            </div>
+
+            <div class="messages-container" id="messages">
+            </div>
+
+            <div class="input-container" id="input-container">
+                <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off">
+                <button id="send-btn"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</body>
+
+</html>

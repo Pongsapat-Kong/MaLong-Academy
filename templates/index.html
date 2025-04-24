@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor - Get Started</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-landing.css') }}">
+</head>
+
+<body>
+    <div class="container landing-container">
+        <div class="landing-content">
+            <h1>Study Buddy AI</h1>
+            <p class="tagline">Your personalized AI tutor that adapts to your learning style</p>
+
+            <div class="setup-form">
+                <div class="form-group">
+                    <label for="user-name">Your Name:</label>
+                    <input type="text" id="user-name" placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="language-select">Choose Language:</label>
+                    <select id="language-select">
+                        <option value="English">English</option>
+                        <option value="Thai">Thai (ไทย)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Choose Your Tutor:</label>
+                    <div class="tutor-options">
+                        <div class="tutor-option" data-role="Sophie - Caring Sister">
+                            <div class="tutor-avatar">👩‍🦰💖</div>
+                            <span>Kind Sister</span>
+                        </div>
+                        <div class="tutor-option" data-role="Veronica - Mean Stepmother">
+                            <div class="tutor-avatar">👠🧊</div>
+                            <span>Mean StepMother</span>
+                        </div>
+                        <div class="tutor-option" data-role="Captain McSparrow - Humorous Pirate">
+                            <div class="tutor-avatar">🏴‍☠️😂</div>
+                            <span>Humorous Pirate</span>
+                        </div>
+                        <div class="tutor-option" data-role="Cutiepie - Your Crush">
+                            <div class="tutor-avatar">😍💫</div>
+                            <span>Your Crush</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="or-divider-container">
+                    <div class="divider-line"></div>
+                    <div class="or-text">OR</div>
+                    <div class="divider-line"></div>
+                </div>
+                
+                <div class="custom-role-container">
+                    <label class="custom-role-label" for="custom-role-input">Enter Custom Role:</label>
+                    <input type="text" id="custom-role-input" placeholder="e.g., History Professor, Science Enthusiast">
+                </div>
+
+                <div class="start-button-container">
+                    <button id="start-session-btn">START LEARNING SESSION</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='landing.js') }}"></script>
+</body>
+
+</html>
