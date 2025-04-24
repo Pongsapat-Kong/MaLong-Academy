@@ -388,14 +388,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle typing animation for tutor messages
         if (sender === 'tutor' && withTypingAnimation && typingAnimationEnabled) {
             // Use the new paragraph-based typing animation
-            processParagraphsForTyping(messageContentDiv, text);  // Changed to messageContentDiv
+            processParagraphsForTyping(messageContentDiv, text);
 
             // If there's audio, add it AFTER the message content
             if (audioUrl) {
                 const { containerDiv, audio } = createCustomAudioPlayer(audioUrl);
                 audioContainer = containerDiv;
                 audioElement = audio;
-                messageDiv.appendChild(containerDiv);  // Append to messageDiv, not messageContentDiv
+                messageDiv.appendChild(containerDiv);
 
                 // If autoplay is enabled, add to queue
                 if (autoplayEnabled) {
@@ -413,14 +413,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 line.trim() ? `<p>${line}</p>` : '<br>'
             ).join('');
 
-            messageContentDiv.innerHTML = formattedText;  // Changed to messageContentDiv
+            messageContentDiv.innerHTML = formattedText;
 
             // Add custom audio player if available for tutor messages
             if (audioUrl && sender === 'tutor') {
                 const { containerDiv, audio } = createCustomAudioPlayer(audioUrl);
                 audioContainer = containerDiv;
                 audioElement = audio;
-                messageDiv.appendChild(containerDiv);  // Append to messageDiv, not messageContentDiv
+                messageDiv.appendChild(containerDiv);
 
                 // If autoplay is enabled, add to queue
                 if (autoplayEnabled) {
@@ -435,37 +435,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         messagesContainer.appendChild(messageDiv);
 
-        // Scroll to bottom
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // Ensure the container has proper overflow setting
+        messagesContainer.style.overflow = 'auto';
+
+        // Scroll to bottom - implement with a small delay to ensure content is rendered
+        setTimeout(() => {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 10);
     }
 
     // Properly define initializeChat function with the welcome screen implementation
     async function initializeChat() {
         messagesContainer.innerHTML = '';
-        // Create welcome screen inside the messages container instead of appending to container
+        // Create welcome screen
         const welcomeScreen = document.createElement('div');
         welcomeScreen.className = 'welcome-screen';
 
+        // Important: Store original styles to restore them later
+        const originalStyles = {
+            display: messagesContainer.style.display,
+            flexDirection: messagesContainer.style.flexDirection,
+            alignItems: messagesContainer.style.alignItems,
+            justifyContent: messagesContainer.style.justifyContent,
+            overflow: messagesContainer.style.overflow
+        };
+
+        // Set temporary styles for welcome screen
         messagesContainer.style.display = 'flex';
         messagesContainer.style.flexDirection = 'column';
         messagesContainer.style.alignItems = 'center';
         messagesContainer.style.justifyContent = 'center';
+        messagesContainer.style.overflow = 'hidden'; // Prevent scrolling during welcome
         messagesContainer.appendChild(welcomeScreen);
 
         const userName = sessionData.userName || 'Student';
         welcomeScreen.innerHTML = `
-            <div class="loader-container">
-                <div class="loader-spinner"></div>
-            </div>
-            <h1>Good day, ${userName}</h1>
-            <h2>Let's wrestle some knowledge into our heads! 🤼‍♂️📖 </h2>
-        `;
+        <div class="loader-container">
+            <div class="loader-spinner"></div>
+        </div>
+        <h1>Good day, ${userName}</h1>
+        <h2>Let's wrestle some knowledge into our heads! 🤼‍♂️📖 </h2>
+    `;
 
-        // Instead of hiding messages container, add the welcome screen to it
-        welcomeScreen.style.display = 'flex';
-        // Keep message container visible
-        messagesContainer.style.display = 'block';
-        // Only hide input until welcome is done
         document.getElementById('input-container').style.display = 'none';
 
         try {
@@ -490,10 +501,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Remove welcome screen from DOM
                 welcomeScreen.remove();
 
-                // Reset messagesContainer styles
-                messagesContainer.style.display = 'block';
-                messagesContainer.style.alignItems = '';
-                messagesContainer.style.justifyContent = '';
+                // Reset messagesContainer styles to original values
+                messagesContainer.style.display = originalStyles.display || 'block';
+                messagesContainer.style.flexDirection = originalStyles.flexDirection || '';
+                messagesContainer.style.alignItems = originalStyles.alignItems || '';
+                messagesContainer.style.justifyContent = originalStyles.justifyContent || '';
+                messagesContainer.style.overflow = originalStyles.overflow || 'auto'; // Re-enable scrolling
 
                 // Show chat interface and input
                 document.getElementById('input-container').style.display = 'flex';
@@ -505,12 +518,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 userInput.disabled = false;
                 sendBtn.disabled = false;
                 userInput.focus();
-            }, 1000); // Show welcome for 2.5 seconds before transitioning
+            }, 1000); // Show welcome for 1 second before transitioning
 
         } catch (error) {
             console.error('Error starting chat:', error);
-            // Show error
+            // Show error and restore original styles
             welcomeScreen.remove();
+            messagesContainer.style.display = originalStyles.display || 'block';
+            messagesContainer.style.flexDirection = originalStyles.flexDirection || '';
+            messagesContainer.style.alignItems = originalStyles.alignItems || '';
+            messagesContainer.style.justifyContent = originalStyles.justifyContent || '';
+            messagesContainer.style.overflow = originalStyles.overflow || 'auto'; // Re-enable scrolling
+
             document.getElementById('input-container').style.display = 'flex';
             addMessage('Failed to start chat session. Please refresh the page or try again later.', 'system');
         }
